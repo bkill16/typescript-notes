@@ -18,6 +18,7 @@ interface Folder {
 class FolderManager {
   private folderList: HTMLElement;
   private notesDisplay: HTMLElement;
+  private currentlySelectedNote: string | ObjectId | null = null;
 
   constructor() {
     this.folderList = document.getElementById("folderList")!;
@@ -53,8 +54,12 @@ class FolderManager {
 
       if (!response.ok) throw new Error("Failed to delete folder");
 
-      await this.loadFolders(); // Refresh folder list
-      this.notesDisplay.innerHTML = "<h2>Select a note to view</h2>"; // Clear note display
+      await this.loadFolders();
+      // Clear note display if a note from this folder was selected
+      if (this.notesDisplay.querySelector(".note-content")) {
+        this.notesDisplay.innerHTML = "<h2>Select a note to view</h2>";
+        this.currentlySelectedNote = null;
+      }
     } catch (error) {
       console.error("Error deleting folder:", error);
       alert("Failed to delete folder");
@@ -82,8 +87,13 @@ class FolderManager {
 
       if (!response.ok) throw new Error("Failed to delete note");
 
-      await this.loadFolders(); // Refresh folder list
-      this.notesDisplay.innerHTML = "<h2>Select a note to view</h2>"; // Clear note display
+      // Clear currently selected note if we're deleting it
+      if (this.currentlySelectedNote === noteId.toString()) {
+        this.currentlySelectedNote = null;
+        this.notesDisplay.innerHTML = "<h2>Select a note to view</h2>";
+      }
+
+      await this.loadFolders();
     } catch (error) {
       console.error("Error deleting note:", error);
       alert("Failed to delete note");
@@ -110,6 +120,7 @@ class FolderManager {
       const note: Note = await response.json();
       await this.loadFolders();
       this.displayNote(note);
+      this.currentlySelectedNote = note._id.toString();
     } catch (error) {
       console.error("Error creating note:", error);
       alert("Failed to create note");
@@ -163,7 +174,6 @@ class FolderManager {
       const folderHeader = document.createElement("div");
       folderHeader.className = "folder-header";
 
-      // Create folder container for name and delete button
       const folderContent = document.createElement("div");
       folderContent.className = "folder-content";
       folderContent.innerHTML = `
@@ -176,7 +186,6 @@ class FolderManager {
         </button>
       `;
 
-      // Add delete folder handler
       const deleteFolderBtn = folderContent.querySelector(".delete-folder-btn");
       deleteFolderBtn?.addEventListener("click", (e) =>
         this.deleteFolder(folder._id, e)
@@ -184,16 +193,13 @@ class FolderManager {
 
       folderHeader.appendChild(folderContent);
 
-      // Add dropdown arrow
       const arrow = document.createElement("i");
       arrow.className = "fas fa-chevron-right arrow";
       folderHeader.insertBefore(arrow, folderContent);
 
-      // Create notes container
       const notesContainer = document.createElement("ul");
       notesContainer.className = "notes-container hidden";
 
-      // Create "New Note" button
       const newNoteBtn = document.createElement("button");
       newNoteBtn.className = "new-note-btn";
       newNoteBtn.innerHTML = '<i class="fas fa-plus"></i> New Note';
@@ -203,11 +209,16 @@ class FolderManager {
       };
       notesContainer.appendChild(newNoteBtn);
 
-      // Load and render notes
       const notes = await this.loadFolderNotes(folder._id);
       notes.forEach((note) => {
         const noteItem = document.createElement("li");
         noteItem.className = "note-item";
+        noteItem.dataset.noteId = note._id.toString();
+
+        // Add selected class if this is the currently selected note
+        if (this.currentlySelectedNote === note._id.toString()) {
+          noteItem.classList.add("selected");
+        }
 
         const noteContent = document.createElement("div");
         noteContent.className = "note-content-wrapper";
@@ -221,15 +232,13 @@ class FolderManager {
           </button>
         `;
 
-        // Add click handler for note selection
         noteContent
           .querySelector(".note-info")
           ?.addEventListener("click", (e) => {
             e.stopPropagation();
-            this.displayNote(note);
+            this.switchToNote(note, noteItem);
           });
 
-        // Add delete note handler
         noteContent
           .querySelector(".delete-note-btn")
           ?.addEventListener("click", (e) =>
@@ -242,7 +251,6 @@ class FolderManager {
 
       li.appendChild(notesContainer);
 
-      // Toggle notes visibility
       folderHeader.onclick = () => {
         arrow.classList.toggle("rotated");
         notesContainer.classList.toggle("hidden");
@@ -251,6 +259,21 @@ class FolderManager {
       li.insertBefore(folderHeader, li.firstChild);
       this.folderList.appendChild(li);
     });
+  }
+
+  private switchToNote(note: Note, noteItem: HTMLElement): void {
+    // Remove selected class from all notes
+    const allNotes = this.folderList.querySelectorAll(".note-item");
+    allNotes.forEach((item) => item.classList.remove("selected"));
+
+    // Add selected class to clicked note
+    noteItem.classList.add("selected");
+
+    // Update currently selected note
+    this.currentlySelectedNote = note._id.toString();
+
+    // Display the note content
+    this.displayNote(note);
   }
 
   private displayNote(note: Note): void {
@@ -263,7 +286,7 @@ class FolderManager {
   }
 }
 
-// Initialize
+// Initialize the FolderManager when the DOM content is loaded
 document.addEventListener("DOMContentLoaded", () => {
   new FolderManager();
 });
