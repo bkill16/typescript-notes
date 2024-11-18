@@ -1,0 +1,280 @@
+/* GLOBAL */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  background: rgb(131, 58, 180);
+  background: linear-gradient(
+    90deg,
+    rgba(131, 58, 180, 1) 0%,
+    rgba(252, 127, 69, 1) 65%
+  );
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+.home-layout {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* HOME */
+
+.home-title {
+  color: white;
+  text-align: center;
+  font-size: 6em;
+}
+
+.home-button {
+  text-decoration: none;
+  background: #833ab4;
+  color: #fff;
+  font-size: 1.5em;
+  padding: 15px 25px;
+  border: 1px #833ab4 solid;
+  border-radius: 4px;
+  margin: 25px;
+}
+
+.home-button:hover {
+  background: #5c3ab4;
+  border-color: #5c3ab4;
+}
+
+/* NOTES */
+
+/* Dashboard header */
+.dashboard-title {
+  font-size: 2.5em;
+  color: #fff;
+  text-align: center;
+  margin: 20px 0;
+  font-weight: 700;
+}
+
+/* Main layout */
+.dashboard {
+  display: flex;
+  height: calc(100vh - 80px);
+  margin: 0 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar styles */
+.sidebar {
+  width: 300px;
+  background: #ffffff;
+  padding: 20px;
+  overflow-y: auto;
+  border-right: 1px solid #e0e0e0;
+}
+
+.sidebar h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.25em;
+}
+
+/* Folder styles */
+.folder-item {
+  list-style: none;
+  margin-bottom: 12px;
+}
+
+.folder-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  cursor: pointer;
+  background: #f8f9fa;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.folder-header:hover {
+  background: #f0f2f5;
+}
+
+.folder-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.folder-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.folder-header i.fa-folder {
+  color: #833ab4;
+  font-size: 1.1em;
+}
+
+.folder-header i.arrow {
+  color: #666;
+  font-size: 0.8em;
+  transition: transform 0.2s ease;
+}
+
+.folder-header i.arrow.rotated {
+  transform: rotate(90deg);
+}
+
+/* Notes container */
+.notes-container {
+  margin-left: 28px;
+  margin-top: 8px;
+  border-left: 2px solid #e0e0e0;
+  padding-left: 12px;
+}
+
+.notes-container.hidden {
+  display: none;
+}
+
+/* Note items */
+.note-item {
+  margin-bottom: 4px;
+}
+
+.note-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.note-content-wrapper:hover {
+  background: #f0f2f5;
+}
+
+.note-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.note-info i {
+  color: #666;
+  font-size: 0.9em;
+}
+
+/* Button styles */
+.new-folder-btn,
+.new-note-btn {
+  width: 100%;
+  padding: 10px;
+  margin-top: 12px;
+  background: #833ab4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.new-folder-btn:hover,
+.new-note-btn:hover {
+  background: #6d2ea0;
+  transform: translateY(-1px);
+}
+
+.new-folder-btn:active,
+.new-note-btn:active {
+  transform: translateY(0);
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 6px;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.delete-btn:hover {
+  opacity: 1;
+  color: #dc3545;
+  background: rgba(220, 53, 69, 0.1);
+}
+
+/* Note display area */
+.note-display {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+  background: #f8f9fa;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.note-display h2 {
+  color: #9c9797;
+  font-weight: 500;
+}
+
+.note-content {
+  width: 100%;
+  max-width: 800px;
+  padding: 30px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.note-content h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.note-text {
+  line-height: 1.7;
+  color: #444;
+  font-size: 1.05em;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}

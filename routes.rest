@@ -1,0 +1,98 @@
+// FOLDER
+
+# Create Folder
+POST http://localhost:3000/folders
+Content-Type: application/json
+
+{
+  "name": "Work"
+}
+
+###
+
+# Invalid Create Folder (No name)
+POST http://localhost:3000/folders
+Content-Type: application/json
+
+{}
+
+###
+
+# Get All Folders
+GET http://localhost:3000/folders
+
+# Get Folder with Notes
+GET http://localhost:3000/folders/6739072c3e33ae1a5b064a7b
+
+###
+
+# Update Folder
+PUT http://localhost:3000/folders/6739072c3e33ae1a5b064a7b
+Content-Type: application/json
+
+{
+  "name": "Work Updated"
+}
+
+###
+
+# Invalid Update Folder (No name)
+PUT http://localhost:3000/folders/6739072c3e33ae1a5b064a7b
+Content-Type: application/json
+
+{}
+###
+
+# Delete Folder
+DELETE http://localhost:3000/folders/6739072c3e33ae1a5b064a7b
+
+###
+
+// NOTES
+
+# Create Note in a Folder
+POST http://localhost:3000/notes/6739146625eecf1a56118f95
+Content-Type: application/json
+
+{
+  "title": "Second Note",
+  "content": "This is the content of the second note."
+}
+
+###
+
+# Invalid Create Note (Missing title)
+POST http://localhost:3000/notes/6739146625eecf1a56118f95
+Content-Type: application/json
+
+{
+  "content": "This note has no title."
+}
+
+###
+
+# Get All Notes in Folder
+GET http://localhost:3000/notes/6739146625eecf1a56118f95
+
+###
+
+# Get Single Note in Folder
+GET http://localhost:3000/notes/6739146625eecf1a56118f95/673915a025eecf1a56118f9d
+
+###
+
+# Update Note in Folder
+PUT http://localhost:3000/notes/6739146625eecf1a56118f95/673915a025eecf1a56118f9d
+Content-Type: application/json
+
+{
+  "title": "Updated Second Note",
+  "content": "This is the updated content of the second note."
+}
+
+###
+
+# Delete Note in Folder
+DELETE http://localhost:3000/notes/6739146625eecf1a56118f95/673915a025eecf1a56118f9d
+
+###
